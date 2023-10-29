@@ -11,9 +11,28 @@ const FileUploader: React.FC = () => {
         setFile(selectedFile);
     };
 
-    const handleSubmit = () => {
-        axios.post("");
-    };
+    const handleSubmit = async (event: FormEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const formData = new FormData()
+       
+        // validate we have a file
+        if (!file) {
+            return;
+        } else {
+            formData.append("file_upload", file);
+        }
+        
+        console.log(formData)
+        try {
+            console.log('formdata: ', formData.entries())
+            const response = await axios.post("http://localhost:8000/upload",
+                formData
+            )
+            console.log(response)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const getSizePrefix = (sizeInBytes: number): string => {
         if (sizeInBytes < 1024) {
